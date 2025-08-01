@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Task</title>
+</head>
+<body>
+    <main>
+        <h2>Submit Task</h2>
+        <form action="/employee/tasks/<%= task._id %>/submit" method="POST" enctype="multipart/form-data">
+            <textarea name="content" placeholder="Enter Your work.." required></textarea><br>
+            <input type="file" name="file"><br>
+            <button type="submit">Submit Task</button>
+        </form>
+        <a href="/employee/tasks">Back</a>
+    </main>
+</body>
+</html>

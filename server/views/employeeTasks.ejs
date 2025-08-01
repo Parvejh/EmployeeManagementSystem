@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Tasks</title>
+</head>
+<body>
+    <main>
+        <h2>Your Assigned Tasks</h2>
+        <table border="1">
+            <tr>
+                <th>Title</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <% tasks.forEach(task=>{%>
+                <tr>
+                    <td><%= task.title %></td>
+                    <td><%= task.status %></td>
+                    <td>
+                        <% if(task.status === 'assigned'){ %>
+                            <a href="/employee/tasks/<%= task._id %>/submit">
+                                Submit
+                            </a>
+                        <%}else{%>
+                            Submitted
+                        <%} %>
+                    </td>
+                </tr>
+            <%})%>
+        </table>
+        <a href="/logout">Logout</a>
+    </main>
+</body>
+</html>

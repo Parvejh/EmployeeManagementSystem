@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const {requireAuth, isAdmin, isEmployee} = require('../middleware/authMiddleware');
-
+const adminController = require('../controllers/adminController');
+const employeeController = require('../controllers/employeeController');
+const upload = require('../middleware/multer')
 //Admin Dashboard
 router.get('/admin/dashboard', 
     requireAuth, 
@@ -18,6 +20,45 @@ router.get('/employee/dashboard',
     (req,res)=>{
         res.render('employeeDashboard',{name:req.user.id})
     }
+)
+
+// Admin Task Routes
+router.get('/admin/tasks/assign',
+    requireAuth,
+    isAdmin,
+    adminController.getAssignTask
+)
+
+router.post('/admin/tasks/assign',
+    requireAuth,
+    isAdmin,
+    adminController.postAssignTask
+)
+
+router.get('/admin/tasks',
+    requireAuth,
+    isAdmin,
+    adminController.getAllTasks
+)
+
+// Employee view tasks
+router.get('/employee/tasks',
+    requireAuth,
+    isEmployee,
+    employeeController.getEmployeeTasks
+)
+
+router.get('/employee/tasks/:taskId/submit',
+    requireAuth,
+    isEmployee,
+    employeeController.getSubmitTask
+)
+
+router.post('/employee/tasks/:taskId/submit',
+    requireAuth,
+    isEmployee,
+    upload.single('file'),
+    employeeController.postSubmitTask
 )
 
 module.exports = router;

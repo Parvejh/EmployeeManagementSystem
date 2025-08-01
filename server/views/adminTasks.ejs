@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Tasks</title>
+</head>
+<body>
+    <main>
+        <h2>All Tasks</h2>
+        <table border="1">
+            <tr>
+                <th>Title</th>
+                <th>Assigned To</th>
+                <th>Status</th>
+                <th>Due By</th>
+            </tr>
+            <% tasks.forEach(task=>{%>
+                <tr>
+                    <td><%= task.title %></td>
+                    <td><%= task.assignedTo.name %></td>
+                    <td><%= task.status %></td>
+                    <td><%= task.dueDate ? task.dueDate.toDateString() : 'N/A' %></td>
+                </tr>
+            <%})%>
+        </table>
+    </main>
+</body>
+</html>
