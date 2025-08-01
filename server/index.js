@@ -17,6 +17,9 @@ app.set('views',path.join(__dirname,'/views'))
 
 // Routes
 const authRoutes = require('./routes/authRoutes')
+const dashboardRoutes = require('./routes/dashboardRoutes');
+app.use('/',dashboardRoutes);
+
 app.use('/',authRoutes)
 
 

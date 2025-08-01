@@ -9,22 +9,29 @@ exports.getLogin = (req,res)=>{
 exports.postLogin = async (req,res)=>{
     // Destructure & get email, password from req.body
     const {email, password} = req.body;
-    // find the user
-    const user = await User.findOne({email:email});
-    // Is the user is not found OR the password of the user does not match
-    if(!user || !(await bcrypt.compare(password, user.password))){
-        return res.send('Invalid Credentials');
+    try{
+        // find the user
+        const user = await User.findOne({email});
+        // Is the user is not found OR the password of the user does not match
+        if(!user){
+            return res.send('User not found');
+        }
+        // If the password is not correct
+        const matched = await bcrypt.compare(password,user.password)
+        if(!matched) return res.send("Invalid password");
+        // If both conditions are OK
+        // generate a json token
+        const token = jwt.sign(
+            {userId:user._id, role:user.role},
+            process.env.JWT_SECRET
+        );
+        res.cookie('token',token,{httpOnly:true});
+
+        // redirect by Role
+        res.redirect(user.role === 'admin' ? '/admin/dashboard' : '/employee/dashboard')
+    }catch(err){
+        return res.status(500).send("Error logging in ");
     }
-    // If both conditions are OK
-    // generate a json token
-    const token = jwt.sign(
-        {id:user._id, role:user.role},
-        process.env.JWT_SECRET
-    );
-    res.cookie('token',token,{httpOnly:true});
-
-    res.redirect(user.role === 'admin' ? '/admin/dashboard' : '/employee/dashboard')
-
 }
 
 exports.getRegister = (req,res)=>{
@@ -32,13 +39,30 @@ exports.getRegister = (req,res)=>{
 }
 
 exports.postRegister = async (req,res)=>{
-    const {name,email,password} = req.body;
 
-    const hash = await bcrypt.hash(password,10);
 
-    await User.create({name,email,password:hash});
+    const {name,email,password,role,department} = req.body;
 
-    res.redirect('/login');
+    try{
+        const existingUser = await User.findOne({email});
+
+        if(existingUser) return res.send(" User already exist");
+
+        const hashedPassword = await bcrypt.hash(password,10);
+
+        const newUser = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            role,
+            department
+        })
+
+        res.redirect('/login');
+    }
+    catch(err){
+        res.status(500).send('Error registering user');
+    }
 }
 
 exports.logout = (req,res)=>{
