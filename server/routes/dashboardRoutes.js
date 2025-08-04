@@ -41,6 +41,18 @@ router.get('/admin/tasks',
     adminController.getAllTasks
 )
 
+router.get('/admin/tasks/verify',
+    requireAuth,
+    isAdmin,
+    adminController.getSubmittedTasks
+)
+
+router.post('/admin/tasks/:taskid/review',
+    requireAuth,
+    isAdmin,
+    adminController.postReviewTasks
+)
+
 // Employee view tasks
 router.get('/employee/tasks',
     requireAuth,

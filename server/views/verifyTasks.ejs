@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Submitted Tasks</title>
+</head>
+<body>
+    <main>
+        <h2>Tasks Awaiting Verification</h2>
+        <table border="1">
+            <tr>
+                <th>Title</th>
+                <th>Submitted By</th>
+                <th>Work</th>
+                <th>File</th>
+                <th>Action</th>
+            </tr>
+            <% tasks.forEach(task => {%>
+                <tr>
+                    <td><%= task.title %></td>
+                    <td><%= task.assignedTo.name%></td>
+                    <td> <%= task.submission?.content || "No Content"%> </td>
+                    <td>
+                        <% if(task.submission?.fileUrl) {%>
+                            <a href="<%= task.submission.fileUrl %>">Download</a>
+                        <%} else {%>
+                            N/A  
+                        <%}%>
+                    </td>
+                    <td>
+                        <form action="/admin/tasks/<%= task._id %>/review" method="POST">
+                            <textarea name="remarks" placeholder="Enter Your remarks"></textarea>
+                            <button type="submit" name="action" value="verified">
+                                Mark as verified
+                            </button>
+                            <button type="submit" name="action" value="sent_back">
+                                Send Back
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            <%})%>
+
+        </table>
+        <a href="/admin/dashboard">Back</a>
+    </main>
+</body>
+</html>

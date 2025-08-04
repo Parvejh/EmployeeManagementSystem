@@ -31,3 +31,25 @@ exports.getAllTasks = async (req,res)=>{
 
     res.render('adminTasks',{tasks})
 }
+
+// View submitted tasks only
+exports.getSubmittedTasks = async (req,res)=>{
+    const tasks = await Task.find({status:'submitted'})
+    .populate('assignedTo','name')
+
+    res.render('verifyTasks', {tasks})
+}
+
+// Handle verification or rejection
+exports.postReviewTasks = async (req,res)=>{
+    const {action,remarks} = req.body;
+
+    const update = {status:action};
+    if(action === "sent_back"){
+        update.submission = {...update.submission , remarksFromAdmin: remarks}
+    }
+
+    await Task.findByIdAndUpdate(req.params.taskId,update)
+
+    res.redirect('/admin/tasks/verify');
+}
