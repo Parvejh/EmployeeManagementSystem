@@ -4,12 +4,79 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </head>
 <body>
     <main>
-        <h2>Welcome Admin</h2>
-        <p>You are logged in as Admin</p>
-        <a href="/logout">Logout</a>
+        <header class="bg-slate-800 text-white flex items-center justify-between py-2 px-10 text-xl">
+            <h2 class="text-3xl">Admin</h2>
+            <a href="/logout" class="hover:text-orange-400 duration-100">Logout</a>
+
+        </header>
+        <section class="bg-slate-100 flex flex-col p-10">
+            <h2 class="text-2xl mb-5">Assigned Tasks</h2>
+            <table border="1" class="text-left">
+            <tr class="bg-slate-900 text-white border-b-1 ">
+                <th class="px-2 py-1">Title</th>
+                <th class="px-2 py-1">Assigned To</th>
+                <th class="px-2 py-1">Status</th>
+                <th class="px-2 py-1">Due By</th>
+            </tr>
+            <% tasks.forEach(task=>{%>
+                <tr class="hover:bg-slate-200 duration-100 h-10">
+                    <td class="px-2 py-1"><%= task.assignedTo.name %></td>
+                    <td class="px-2 py-1"><%= task.status %></td>
+                    <td class="px-2 py-1"><%= task.title %></td>
+                    <td class="px-2 py-1"><%= task.dueDate ? task.dueDate.toDateString() : 'N/A' %></td>
+                </tr>
+            <%})%>
+        </table>
+        <a href="/admin/tasks/assign" class="bg-slate-500 mt-10 px-3 py-2 text-lg rounded text-white w-fit hover:bg-slate-700 hover:cursor-pointer duration-200">Assign New Task</a>
+        </section>
+        <hr>
+        <section class="bg-slate-200 flex flex-col p-10">
+            <h2 class="text-2xl mb-5">Task Submissions</h2>
+            <table border="1" class="text-left">
+            <tr class="bg-slate-900 text-white border-b-1">
+                <th class="px-2 py-1">Title</th>
+                <th class="px-2 py-1">Submitted By</th>
+                <th class="px-2 py-1">Work</th>
+                <th class="px-2 py-1">File</th>
+                <th class="px-2 py-1">Action</th>
+            </tr>
+            <% submittedTasks.forEach(task => {%>
+                <tr class="hover:bg-slate-300 duration-100">
+                    <td class="px-2 py-1"><%= task.title %></td>
+                    <td class="px-2 py-1"><%= task.assignedTo.name%></td>
+                    <td class="px-2 py-1"> <%= task.submission?.content || "No Content"%> </td>
+                    <td class="px-2 py-1">
+                        <% if(task.submission?.fileUrl) {%>
+                            <a href="<%= task.submission.fileUrl %>" class="px-2 py-1 rounded bg-blue-400 hover:cursor-pointer hover:text-white duration-100">Download</a>
+                        <%} else {%>
+                            N/A  
+                        <%}%>
+                    </td>
+                    <td class="px-2 py-1">
+                        <% if(task.status ==='verified'){%>
+                            Verified
+                        <%}else{%>
+                            <form action="/admin/tasks/<%= task.id %>/review" method="POST" class="flex items-center gap-2">
+                                <textarea name="remarks" placeholder="Enter Your remarks" class="border-1 outline-none p-1 rounded"></textarea>
+                                <button type="submit" name="action" value="verified" class="px-2 py-1 rounded bg-green-500 hover:cursor-pointer hover:text-white duration-100 ">
+                                    Mark as verified
+                                </button>
+                                <button type="submit" name="action" value="sent_back" class="px-2 py-1 rounded bg-red-500 hover:cursor-pointer text-white hover:text-black duration-100">
+                                    Send Back
+                                </button>
+                            </form>
+                        <%}%>
+                    </td>
+                </tr>
+            <%})%>
+
+        </table>
+        </section>
+        
     </main>
 </body>
 </html>

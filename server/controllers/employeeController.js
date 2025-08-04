@@ -26,7 +26,18 @@ exports.postSubmitTask = async (req,res)=>{
         }
     })
 
-    res.redirect('/employee/tasks');
+    res.redirect('/employee/dashboard');
 }
 
-// 
+// Employee Dashboard
+exports.getEmployeeDashboard = async (req,res)=>{
+    try{
+        const tasks = await Task.find({assignedTo:req.user.userId});    
+
+        
+        res.render('employeeDashboard', {name:req.user.name, tasks})
+    }catch(err){
+        console.log(err)
+        res.status(500).send(err);
+    }
+}

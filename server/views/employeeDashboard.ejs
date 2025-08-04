@@ -7,9 +7,38 @@
 </head>
 <body>
     <main>
-        <h2>Welcome Employee</h2>
-        <p>You are logged in as Employee</p>
-        <a href="/logout">Logout</a>
+        <section>
+            <h2>Welcome Employee</h2>
+            <p>You are logged in as Employee</p>
+            <a href="/logout">Logout</a>
+        </section>
+        <section>
+            <h3>Your Tasks</h3>
+            <table border="1">
+                <tr>
+                    <th>Title</th>
+                    <th>Status</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                </tr>
+                <% tasks.forEach(task=>{%>
+                    <tr>
+                        <td><%= task.title %></td>
+                        <td><%= task.status %></td>
+                        <td><%= task.submission?.remarksFromAdmin || 'None' %></td>
+                        <td>
+                            <% if(task.status === 'assigned' || task.status === 'sent_back'){ %>
+                            <a href="/employee/tasks/<%= task._id %>/submit">
+                                Submit
+                            </a>
+                            <%}else{%>
+                                Submitted
+                            <%} %>
+                        </td>
+                    </tr>
+                <%})%>
+            </table>
+        </section>
     </main>
 </body>
 </html>
