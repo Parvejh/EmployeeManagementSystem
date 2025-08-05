@@ -1,4 +1,5 @@
 const Task  = require('../models/tasksModel');
+const User = require('../models/userModel')
 const multer = require('multer')
 const path = require('path');
 
@@ -32,10 +33,10 @@ exports.postSubmitTask = async (req,res)=>{
 // Employee Dashboard
 exports.getEmployeeDashboard = async (req,res)=>{
     try{
-        const tasks = await Task.find({assignedTo:req.user.userId});    
-
-        
-        res.render('employeeDashboard', {name:req.user.name, tasks})
+        const tasks = await Task.find({assignedTo:req.user.userId}).sort({createdAt:-1})
+         
+        const employee = await User.findById(req.user.userId)
+        res.render('employeeDashboard', {employee, tasks})
     }catch(err){
         console.log(err)
         res.status(500).send(err);

@@ -2,6 +2,7 @@ const dotenv = require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const ejsLayouts = require('express-ejs-layouts')
 
 const app = express();
 
@@ -15,11 +16,18 @@ app.use(cookieParser())     //Helps in reading cookies sent by the client
 app.set('view engine','ejs');
 app.set('views',path.join(__dirname,'/views'))
 
+// use layouts
+// app.use(ejsLayouts);
+// app.set('layout extractStyles' , true)
+// app.set('layout extractScripts' , true)
+
+// set statics
+app.set(express.static(path.join(__dirname,'../public')))
+
 // Routes
 const authRoutes = require('./routes/authRoutes')
 const dashboardRoutes = require('./routes/dashboardRoutes');
 app.use('/',dashboardRoutes);
-
 app.use('/',authRoutes)
 
 

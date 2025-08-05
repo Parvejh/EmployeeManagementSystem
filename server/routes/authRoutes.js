@@ -6,7 +6,7 @@ const { redirectIfAuthenticated } = require('../middleware/authMiddleware');
 
 // Login , Register
 router.get('/login', redirectIfAuthenticated, (req, res) => {
-    res.render('login');
+    res.render('login',{layout:false});
 });
 router.post('/login',authController.postLogin);
 router.get('/register', authController.getRegister);

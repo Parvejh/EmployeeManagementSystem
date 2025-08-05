@@ -4,31 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Employee Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .verified{
+            background: #07f171;
+        }
+        .assigned{
+            background: #f1b307;
+        }
+        .sent_back{
+            background: #d72c0e;
+        }
+    </style>
 </head>
 <body>
+    <header class="bg-slate-800 text-white flex items-center justify-between py-2 px-10 text-xl">
+        <h2 class="text-3xl"><%= employee.name %></h2>
+        <a href="/logout" class="hover:text-orange-400 duration-100">Logout</a>
+    </header>
     <main>
-        <section>
-            <h2>Welcome Employee</h2>
-            <p>You are logged in as Employee</p>
-            <a href="/logout">Logout</a>
-        </section>
-        <section>
-            <h3>Your Tasks</h3>
-            <table border="1">
-                <tr>
-                    <th>Title</th>
-                    <th>Status</th>
-                    <th>Remarks</th>
-                    <th>Action</th>
+        <section class="bg-slate-100 flex flex-col p-10"> 
+            <h3 class="text-2xl mb-5">Your Tasks</h3>
+            <table border="1" class="text-left">
+                <tr class="bg-slate-900 text-white border-b-1">
+                    <th class="px-2 py-1">Title</th>
+                    <th class="px-2 py-1">Status</th>
+                    <th class="px-2 py-1">Remarks</th>
+                    <th class="px-2 py-1">Action</th>
                 </tr>
                 <% tasks.forEach(task=>{%>
-                    <tr>
-                        <td><%= task.title %></td>
-                        <td><%= task.status %></td>
-                        <td><%= task.submission?.remarksFromAdmin || 'None' %></td>
-                        <td>
+                    <tr class="hover:bg-slate-200 duration-100 h-10">
+                        <td class="px-2 py-1"><%= task.title %></td>
+                        <td class="px-2 py-1 <%= task.status %> <%= (task.status==='sent_back')?'text-white':''%>"><%= task.status %></td>
+                        <td class="px-2 py-1"><%= task.submission?.remarksFromAdmin || 'None' %></td>
+                        <td class="px-2 py-1">
                             <% if(task.status === 'assigned' || task.status === 'sent_back'){ %>
-                            <a href="/employee/tasks/<%= task._id %>/submit">
+                            <a href="/employee/tasks/<%= task._id %>/submit" class="px-3 py-1 rounded bg-green-500 hover:cursor-pointer hover:text-white duration-100 ">
                                 Submit
                             </a>
                             <%}else{%>

@@ -15,7 +15,7 @@ exports.postAssignTask = async (req,res)=>{
         description,
         dueDate,
         assignedTo,
-        assignedBy:req.user.id
+        assignedBy:req.user.userId
     })
 
     res.redirect('/admin/dashboard');
@@ -71,17 +71,18 @@ exports.postReviewTasks = async (req,res)=>{
 
 exports.getAdminDashboard = async (req,res)=>{
     try{
+        const userName = await User.findById(req.user.userId)
         // get all the tasks & display them
-        const tasks = await Task.find()
+        const tasks = await Task.find({assignedBy:req.user.userId})
         .populate('assignedTo','name')
         .populate('assignedBy', 'name')
+        .sort({createdAt:-1})
 
         // get all the submitted tasks
-        const submittedTasks = await Task.find({status:'submitted'})
+        const submittedTasks = await Task.find({status:'submitted',assignedBy:req.user.userId})
         .populate('assignedTo','name')
-
         // render the dashboard with all & submitted tasks
-        return res.render('adminDashboard',{tasks,submittedTasks});
+        return res.render('adminDashboard',{name:userName.name,tasks,submittedTasks});
     }catch(error){
         res.status(500).send("Admin Dashboard error : ",error);
     }

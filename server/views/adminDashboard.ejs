@@ -4,15 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Dashboard</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4">
+    </script>
+    <style>
+        .verified{
+            background: #07f171;
+        }
+        .assigned{
+            background: #f1b307;
+        }
+        .sent_back{
+            background: #d72c0e;
+        }
+    </style>
 </head>
 <body>
-    <main>
-        <header class="bg-slate-800 text-white flex items-center justify-between py-2 px-10 text-xl">
-            <h2 class="text-3xl">Admin</h2>
-            <a href="/logout" class="hover:text-orange-400 duration-100">Logout</a>
+    <header class="bg-slate-800 text-white flex items-center justify-between py-2 px-10 text-xl">
+        <h2 class="text-3xl"><%= name %></h2>
+        <a href="/logout" class="hover:text-orange-400 duration-100">Logout</a>
 
-        </header>
+    </header>
+    <main>
         <section class="bg-slate-100 flex flex-col p-10">
             <h2 class="text-2xl mb-5">Assigned Tasks</h2>
             <table border="1" class="text-left">
@@ -24,9 +36,9 @@
             </tr>
             <% tasks.forEach(task=>{%>
                 <tr class="hover:bg-slate-200 duration-100 h-10">
+                    <td class="px-2 py-1 font-semibold"><%= task.title %></td>
                     <td class="px-2 py-1"><%= task.assignedTo.name %></td>
-                    <td class="px-2 py-1"><%= task.status %></td>
-                    <td class="px-2 py-1"><%= task.title %></td>
+                    <td class="px-2 py-1 <%= task.status %> <%= (task.status==='sent_back')?'text-white':''%>"><%= task.status %></td>
                     <td class="px-2 py-1"><%= task.dueDate ? task.dueDate.toDateString() : 'N/A' %></td>
                 </tr>
             <%})%>
@@ -44,6 +56,11 @@
                 <th class="px-2 py-1">File</th>
                 <th class="px-2 py-1">Action</th>
             </tr>
+            <%if(submittedTasks.length==0 ){ %>
+                <tr colspan="5" class="text-lg pt-4">
+                    <td>No New Submissions</td>
+                </tr>
+            <%}%>
             <% submittedTasks.forEach(task => {%>
                 <tr class="hover:bg-slate-300 duration-100">
                     <td class="px-2 py-1"><%= task.title %></td>

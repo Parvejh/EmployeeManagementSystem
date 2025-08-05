@@ -4,16 +4,25 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Task</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link
+    href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css"
+    rel="stylesheet"
+/>
 </head>
-<body>
-    <main>
-        <h2>Submit Task</h2>
-        <form action="/employee/tasks/<%= task._id %>/submit" method="POST" enctype="multipart/form-data">
-            <textarea name="content" placeholder="Enter Your work.." required></textarea><br>
-            <input type="file" name="file"><br>
-            <button type="submit">Submit Task</button>
+<body class="h-[100%] bg-slate-200 flex items-center justify-center">
+    <main class="bg-white py-8 px-3 flex flex-col items-start rounded mt-40 w-120">
+        <h2 class="text-2xl mb-3 font-semibold">Task : <%= task.title %></h2>
+        <h3 class="text-xl mb-5 text-slate-500 font-semibold">Desc: <%= task.description %></h3>
+        <form action="/employee/tasks/<%= task._id %>/submit" method="POST" enctype="multipart/form-data" class="flex flex-col w-full items-start"> 
+            <textarea name="content" placeholder="Enter Your work.." required class=" w-full h-30 resize-none border-1 outline-none p-2 rounded"></textarea><br>
+            <div class="border-1 mt-2 p-2  rounded">
+                <i class="ri-attachment-2 absolute"></i>
+                <input type="file" name="file" class="cursor-pointer pl-5">
+            </div>
+            <button type="submit" class="px-3 py-1 rounded bg-green-500 hover:cursor-pointer hover:text-white duration-100 mt-3">Submit Task</button>
         </form>
-        <a href="/employee/dashboard">Back</a>
+        <a href="/employee/dashboard" class="mt-5 text-lg hover:cursor-pointer text-left" >Back</a>
     </main>
 </body>
 </html>
