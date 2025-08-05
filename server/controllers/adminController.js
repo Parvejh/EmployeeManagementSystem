@@ -51,6 +51,10 @@ exports.postReviewTasks = async (req,res)=>{
     task.action = action;
     task.remarksFromAdmin = remarks;
 
+    if(req.file){
+        task.submission.adminFeedbackFile = req.file.path;
+    }
+
     if(task.action === 'verified'){
         await Task.findByIdAndUpdate(req.params.taskId, {status:'verified'})
         task.submission = {...(task.submission ||{}), remarksFromAdmin: remarks}
@@ -78,11 +82,20 @@ exports.getAdminDashboard = async (req,res)=>{
         .populate('assignedBy', 'name')
         .sort({createdAt:-1})
 
+        // Pagination for submitted tasks
+        const page =  parseInt(req.query.page ) || 1;
+        const limit = 5;
+        const skip = (page -1 ) * limit;
+        const total = await Task.countDocuments({status:'submitted',assignedBy:req.user.userId})
+
         // get all the submitted tasks
         const submittedTasks = await Task.find({status:'submitted',assignedBy:req.user.userId})
         .populate('assignedTo','name')
+        .skip(skip)
+        .limit(limit)
+
         // render the dashboard with all & submitted tasks
-        return res.render('adminDashboard',{name:userName.name,tasks,submittedTasks});
+        return res.render('adminDashboard',{name:userName.name,tasks,submittedTasks,currentPage:page, totalPages:Math.ceil(total/limit)});
     }catch(error){
         res.status(500).send("Admin Dashboard error : ",error);
     }

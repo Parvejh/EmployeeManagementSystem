@@ -53,6 +53,7 @@ router.post('/admin/tasks/assign',
 router.post('/admin/tasks/:taskId/review',
     requireAuth,
     isAdmin,
+    upload.single('adminFile'),
     adminController.postReviewTasks
 )
 

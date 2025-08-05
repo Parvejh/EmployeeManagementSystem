@@ -25,27 +25,6 @@
 
     </header>
     <main>
-        <section class="bg-slate-100 flex flex-col p-10">
-            <h2 class="text-2xl mb-5">Assigned Tasks</h2>
-            <table border="1" class="text-left">
-            <tr class="bg-slate-900 text-white border-b-1 ">
-                <th class="px-2 py-1">Title</th>
-                <th class="px-2 py-1">Assigned To</th>
-                <th class="px-2 py-1">Status</th>
-                <th class="px-2 py-1">Due By</th>
-            </tr>
-            <% tasks.forEach(task=>{%>
-                <tr class="hover:bg-slate-200 duration-100 h-10">
-                    <td class="px-2 py-1 font-semibold"><%= task.title %></td>
-                    <td class="px-2 py-1"><%= task.assignedTo.name %></td>
-                    <td class="px-2 py-1 <%= task.status %> <%= (task.status==='sent_back')?'text-white':''%>"><%= task.status %></td>
-                    <td class="px-2 py-1"><%= task.dueDate ? task.dueDate.toDateString() : 'N/A' %></td>
-                </tr>
-            <%})%>
-        </table>
-        <a href="/admin/tasks/assign" class="bg-slate-500 mt-10 px-3 py-2 text-lg rounded text-white w-fit hover:bg-slate-700 hover:cursor-pointer duration-200">Assign New Task</a>
-        </section>
-        <hr>
         <section class="bg-slate-200 flex flex-col p-10">
             <h2 class="text-2xl mb-5">Task Submissions</h2>
             <table border="1" class="text-left">
@@ -90,10 +69,41 @@
                     </td>
                 </tr>
             <%})%>
-
+    
         </table>
+    
+        <div>
+            <% if(currentPage >1 ){%>
+                <a href="?page=<%= currentPage - 1 %>"><b>Prev</b></a>
+            <%}%>
+            Page <%= currentPage %> of <%= totalPages %>
+            <% if(currentPage < totalPages ){%>
+                <a href="?page=<%= currentPage + 1 %>"><b>Next</b></a>
+            <%}%>
+        </div>
+    
         </section>
-        
+        <hr>
+        <section class="bg-slate-100 flex flex-col p-10">
+            <h2 class="text-2xl mb-5">Assigned Tasks</h2>
+            <table border="1" class="text-left">
+            <tr class="bg-slate-900 text-white border-b-1 ">
+                <th class="px-2 py-1">Title</th>
+                <th class="px-2 py-1">Assigned To</th>
+                <th class="px-2 py-1">Status</th>
+                <th class="px-2 py-1">Due By</th>
+            </tr>
+            <% tasks.forEach(task=>{%>
+                <tr class="hover:bg-slate-200 duration-100 h-10">
+                    <td class="px-2 py-1 font-semibold"><%= task.title %></td>
+                    <td class="px-2 py-1"><%= task.assignedTo.name %></td>
+                    <td class="px-2 py-1 <%= task.status %> <%= (task.status==='sent_back')?'text-white':''%>"><%= task.status %></td>
+                    <td class="px-2 py-1"><%= task.dueDate ? task.dueDate.toDateString() : 'N/A' %></td>
+                </tr>
+            <%})%>
+        </table>
+        <a href="/admin/tasks/assign" class="bg-slate-500 mt-10 px-3 py-2 text-lg rounded text-white w-fit hover:bg-slate-700 hover:cursor-pointer duration-200">Assign New Task</a>
+        </section>
     </main>
 </body>
 </html>
