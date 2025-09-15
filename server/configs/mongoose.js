@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 // connect the mongoose
-mongoose.connect('mongodb://127.0.0.1:27017/EmployeeManagementSystemDB');
+mongoose.connect(process.env.MONGO_URI);
 
 const db = mongoose.connection;
 
