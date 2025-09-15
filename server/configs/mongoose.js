@@ -10,5 +10,4 @@ db.once('open',()=>{
     console.log("Connection to MongoDB successfull");
 })
 
-
 module.exports = db;
