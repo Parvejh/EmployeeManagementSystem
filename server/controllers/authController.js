@@ -30,6 +30,7 @@ exports.postLogin = async (req,res)=>{
         // redirect by Role
         res.redirect(user.role === 'admin' ? '/admin/dashboard' : '/employee/dashboard')
     }catch(err){
+        console.log(err);
         return res.status(500).send("Error logging in ");
     }
 }
